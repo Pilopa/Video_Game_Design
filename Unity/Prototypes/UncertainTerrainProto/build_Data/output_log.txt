@@ -1,0 +1,34 @@
+Mono path[0] = 'D:/VGD/Prototypes/UncertainTerrainProto/build_Data/Managed'
+Mono path[1] = 'D:/VGD/Prototypes/UncertainTerrainProto/build_Data/Mono'
+Mono config path = 'D:/VGD/Prototypes/UncertainTerrainProto/build_Data/Mono/etc'
+PlayerConnection initialized from D:/VGD/Prototypes/UncertainTerrainProto/build_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55309
+Multi-casting "[IP] 192.168.56.1 [Port] 55309 [Flags] 2 [Guid] 3112471228 [EditorId] 2755090822 [Version] 1048832 [Id] WindowsPlayer(DESKTOP-8MO6N1Q) [Debug] 0" to [225.0.0.222:54997]...
+PlayerConnection already initialized - listening to [192.168.56.1:55309]
+Initialize engine version: 5.4.1f1 (649f48bbbf0f)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 980M (ID=0x1617)
+    Vendor:   NVIDIA
+    VRAM:     8152 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.152 seconds
+Platform assembly: D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\VGD\Prototypes\UncertainTerrainProto\build_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 75Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 0.762591 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 257c -> priority: 1 
+  Thread -> id: 2e70 -> priority: 1 
