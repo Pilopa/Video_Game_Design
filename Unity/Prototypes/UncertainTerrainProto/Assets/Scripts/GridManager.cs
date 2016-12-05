@@ -13,14 +13,18 @@ public class GridManager : NetworkBehaviour {
 	public int gridSizeX;
 	public int gridSizeY;
 
-	Dictionary<KeyValuePair<int, int>, GameObject> gridTiles = new Dictionary<KeyValuePair<int, int>, GameObject>();
-	Dictionary<KeyValuePair<int, int>, GameObject> moveRadius = new Dictionary<KeyValuePair<int, int>, GameObject>();
-
 	public bool movingUnit = false;
-	public bool moveRadiusShown = false;
+	public bool moveRadiusShowing = false;
+
 
 	Ray ray;
 	RaycastHit hit;
+
+	//Lists
+	List<GameObject> tiles = new List<GameObject> ();
+	List<GameObject> moveTiles = new List<GameObject> ();
+	List<GameObject> attackTiles = new List<GameObject> ();
+	List<GameObject> notAttackTiles = new List<GameObject> ();
 
 	//Camera
 	public GameObject cameraMover;
@@ -47,7 +51,9 @@ public class GridManager : NetworkBehaviour {
 			for (int x = 0; x < gridSizeX; x++) {
 				lastChild = null;
 				for (int y = 0; y < gridSizeY; y++) {
-					GameObject tmp = Instantiate (tile, new Vector3 (x, 0, y), Quaternion.identity) as GameObject;
+					GameObject tmp = GameObject.Instantiate (tile);
+					tmp.transform.position = new Vector3 (x, -1.5f, y);
+					tmp.transform.rotation = Quaternion.identity;
 					tmp.transform.SetParent (grid.transform);
 					tmp.transform.name = "x" + x + "/y" + y;
 					tmp.gameObject.GetComponent<TileScript> ().posX = x;
@@ -62,8 +68,9 @@ public class GridManager : NetworkBehaviour {
 					}
 					lastChild = tmp;
 					lastRow [y] = tmp;
+					tiles.Add (tmp);
+					NetworkServer.Spawn (tmp);
 
-					gridTiles.Add (new KeyValuePair<int, int> (x, y), tmp);
 				}
 
 			}
@@ -84,7 +91,7 @@ public class GridManager : NetworkBehaviour {
 					} else {
 						if (!movingUnit && !actionMenueActive) {
 							if (hit.collider.gameObject.GetComponent<TileScript> ().moveHere) {
-								gridTiles [new KeyValuePair<int,int> (selectedUnit.GetComponent<PlayerUnit> ().posX, selectedUnit.GetComponent<PlayerUnit> ().posY)].GetComponent<TileScript> ().hasUnit = false;
+								tiles [selectedUnit.GetComponent<PlayerUnit> ().posX * gridSizeX + selectedUnit.GetComponent<PlayerUnit> ().posY].GetComponent<TileScript> ().hasUnit = false;
 								calculatePath (hit.collider.gameObject);
 							}
 						}
@@ -95,27 +102,34 @@ public class GridManager : NetworkBehaviour {
 		}
 		if (isServer) {
 			if (playersDone == 2) {
-
-
-
+				shiftTile ();
 				playersDone = 0;
 			}
 		}
 	}
-
+	public void shiftTile()
+	{
+		foreach (GameObject g in tiles) {
+			//Debug.Log (Mathf.PerlinNoise ((float)g.GetComponent<TileScript> ().posX/(float)gridSizeX,(float) g.GetComponent<TileScript> ().posY/(float)gridSizeY));
+			float randomX = Random.Range (1f,35f);
+			float randomY = Random.Range (1f,35f);
+			g.transform.position = new Vector3 (g.transform.position.x, -1.5f +  (Mathf.PerlinNoise (randomY * (float)g.GetComponent<TileScript> ().posX / (float)gridSizeX, randomY * (float)g.GetComponent<TileScript> ().posY / (float)gridSizeY)), g.transform.position.z);
+	
+		}
+	}
 
 	public void unitClick (GameObject unit){
 		if (unit.GetComponent<NetworkIdentity> ().localPlayerAuthority) {
 			int moveRadius = unit.GetComponent<PlayerUnit> ().moveRadius;
 
-			if (!movingUnit && moveRadiusShown) {
+			if (!movingUnit && moveRadiusShowing) {
 				isActive = true;
 				// Open menü: Attack, or wait
 				hideMoveRadius();
 				showActionMenue ( unit);
 			} 
-			else if (!moveRadiusShown) {
-				showMoveRadius (moveRadius, unit.GetComponent<PlayerUnit> ().posX, unit.GetComponent<PlayerUnit> ().posY);
+			else if (!moveRadiusShowing) {
+				showMoveRadius (moveRadius, tiles[unit.GetComponent<PlayerUnit> ().posX * gridSizeX + unit.GetComponent<PlayerUnit> ().posY]);
 			}
 		}
 	}
@@ -124,65 +138,27 @@ public class GridManager : NetworkBehaviour {
 
 
 
-	public void showMoveRadius(int mr, int x, int y){
+	public void showMoveRadius(int mr, GameObject startTile){
 		if (!movingUnit) {
-			moveRadiusShown = true;
+			moveRadiusShowing = true;
 			if (mr > 0) {
 				mr -= 1;
-				if (gridTiles.ContainsKey (new KeyValuePair<int, int> (x + 1, y + 0))) {
-					KeyValuePair<int, int> tmp = new KeyValuePair<int, int> (x + 1, y + 0);
-					if (gridTiles [tmp].GetComponent<TileScript> ().accessible && !gridTiles [tmp].GetComponent<TileScript> ().hasUnit) {
-						gridTiles [tmp].GetComponent<Renderer> ().material.color = Color.cyan;
-						gridTiles [tmp].GetComponent<TileScript> ().moveHere = true;
-						if (!moveRadius.ContainsKey (tmp)) {
-							moveRadius.Add (tmp, gridTiles [tmp]);
-						}
-						showMoveRadius (mr, x + 1, y + 0);
-					}
-				}
 
-				if (gridTiles.ContainsKey (new KeyValuePair<int, int> (x + 0, y + 1))) {
-					KeyValuePair<int, int> tmp = new KeyValuePair<int, int> (x + 0, y + 1);
-					if (gridTiles [tmp].GetComponent<TileScript> ().accessible && !gridTiles [tmp].GetComponent<TileScript> ().hasUnit) {
-						gridTiles [tmp].GetComponent<Renderer> ().material.color = Color.cyan;
-						gridTiles [tmp].GetComponent<TileScript> ().moveHere = true;
-						if (!moveRadius.ContainsKey (tmp)) {
-							moveRadius.Add (tmp, gridTiles [tmp]);
+				foreach (GameObject tile in startTile.GetComponent<TileScript> ().neighbours) {
+					if (tile.GetComponent<TileScript> ().accessible && !tile.GetComponent<TileScript> ().hasUnit) {		
+						if (!moveTiles.Contains (tile)) {
+							tile.GetComponent<Renderer> ().material.color = Color.cyan;
+							tile.GetComponent<TileScript> ().moveHere = true;
+							moveTiles.Add (tile);
 						}
-						showMoveRadius (mr, x + 0, y + 1);
+						showMoveRadius (mr, tile);
 					}
 				}
-
-				if (gridTiles.ContainsKey (new KeyValuePair<int, int> (x - 1, y + 0))) {
-					KeyValuePair<int, int> tmp = new KeyValuePair<int, int> (x - 1, y + 0);
-					if (gridTiles [tmp].GetComponent<TileScript> ().accessible && !gridTiles [tmp].GetComponent<TileScript> ().hasUnit) {
-						gridTiles [tmp].GetComponent<Renderer> ().material.color = Color.cyan;
-						gridTiles [tmp].GetComponent<TileScript> ().moveHere = true;
-						showMoveRadius (mr, x - 1, y + 0);
-						if (!moveRadius.ContainsKey (tmp)) {
-							moveRadius.Add (tmp, gridTiles [tmp]);
-						}
-					}
-				}
-
-				if (gridTiles.ContainsKey (new KeyValuePair<int, int> (x + 0, y - 1))) {
-					KeyValuePair<int, int> tmp = new KeyValuePair<int, int> (x + 0, y - 1);
-					if (gridTiles [tmp].GetComponent<TileScript> ().accessible && !gridTiles [tmp].GetComponent<TileScript> ().hasUnit) {
-						gridTiles [tmp].GetComponent<Renderer> ().material.color = Color.cyan;
-						gridTiles [tmp].GetComponent<TileScript> ().moveHere = true;
-						showMoveRadius (mr, x + 0, y - 1);
-						if (!moveRadius.ContainsKey (tmp)) {
-							moveRadius.Add (tmp, gridTiles [tmp]);
-						}
-					}
-				}
-		
 			}
 		}
 		else
 		{
 			hideMoveRadius ();
-
 		}
 	}
 
@@ -202,7 +178,7 @@ public class GridManager : NetworkBehaviour {
 		int startY = selectedUnit.GetComponent<PlayerUnit> ().posY;
 
 		// Try to give the player a reference to the tile he is standing on so that we can dump those retarded dictionaries
-		GameObject selectedTile = gridTiles [new KeyValuePair<int, int> (selectedUnit.GetComponent<PlayerUnit> ().posX, selectedUnit.GetComponent<PlayerUnit> ().posY)];
+		GameObject selectedTile = tiles [selectedUnit.GetComponent<PlayerUnit> ().posX * gridSizeX + selectedUnit.GetComponent<PlayerUnit> ().posY];
 		int tmpFScore = 0;
 		openList.Add (selectedTile);
 
@@ -238,16 +214,14 @@ public class GridManager : NetworkBehaviour {
 				//try and build a path by going from the destination backwards and add the partent to the list
 				int i = selectedUnit.GetComponent<PlayerUnit>().moveRadius;
 				do{
-					//i--;
+					i--;
 					path.Add(parent);
 					parent = parent.GetComponent<TileScript>().parent;
 					Debug.LogError(path.Count);
-					/*
 					if(i<=0){
 						Debug.LogError("Path too long!");
 						break;
 					}
-					*/
 				}while(parent != null);
 				break;
 			}
@@ -257,7 +231,7 @@ public class GridManager : NetworkBehaviour {
 
 			foreach (GameObject tile in selectedTile.GetComponent<TileScript> ().neighbours)
 			{
-				if(!tile.GetComponent<TileScript> ().hasUnit && tile.GetComponent<TileScript> ().accessible &&  moveRadius.ContainsKey (new KeyValuePair<int, int> (tile.GetComponent<TileScript> ().posX, tile.GetComponent<TileScript> ().posY)))
+				if(!tile.GetComponent<TileScript> ().hasUnit && tile.GetComponent<TileScript> ().accessible &&  moveTiles.Contains(tile))
 				{
 					Debug.Log("TileCheck" + tile.transform.name);
 					tile.GetComponent<TileScript> ().gScore = Mathf.Abs(tile.GetComponent<TileScript> ().posX - startX) + Mathf.Abs(tile.GetComponent<TileScript> ().posY - startY);
@@ -307,7 +281,7 @@ public class GridManager : NetworkBehaviour {
 		if (path.Count > 0) {
 			StartCoroutine (MoveOverSeconds (selectedUnit, timeTakenDuringLerp, path));
 		} else {
-			gridTiles [new KeyValuePair<int, int> ((int)end.x, (int)end.z)].GetComponent<TileScript> ().hasUnit = true;
+			tiles [(int)end.x * gridSizeX * (int)end.z].GetComponent<TileScript> ().hasUnit = true;
 			movingUnit = false;
 			showActionMenue (selectedUnit);
 		}
@@ -328,13 +302,12 @@ public class GridManager : NetworkBehaviour {
 	}
 
 	public void hideMoveRadius(){
-		moveRadiusShown = false;
-		List<GameObject> tmpGO = new List<GameObject>(gridTiles.Values);
-		foreach (GameObject go in tmpGO) {
+		moveRadiusShowing = false;
+		foreach (GameObject go in tiles) {
 			go.GetComponent<Renderer> ().material.color = Color.white;
 			go.GetComponent<TileScript> ().moveHere = false;
 		}
-		moveRadius.Clear ();
+		moveTiles.Clear ();
 	}
 
 	public void setMovingUnit(bool b){
