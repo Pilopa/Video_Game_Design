@@ -1,9 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{8F8C198E-4F0E-02E8-F7EE-75615CCC96B3}") = "UncertainTerrainProto", "Assembly-CSharp.csproj", "{DD3A68A9-7F54-AD06-6A77-3FC6FD55E2F5}"
-EndProject
-Project("{8F8C198E-4F0E-02E8-F7EE-75615CCC96B3}") = "UncertainTerrainProto", "Assembly-CSharp-Editor.csproj", "{51139EBA-7198-7EDD-E7EC-73C0537FBA37}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UncertainTerrainProto", "Assembly-CSharp.csproj", "{DD3A68A9-7F54-AD06-6A77-3FC6FD55E2F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,6 @@ Global
 		{DD3A68A9-7F54-AD06-6A77-3FC6FD55E2F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD3A68A9-7F54-AD06-6A77-3FC6FD55E2F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD3A68A9-7F54-AD06-6A77-3FC6FD55E2F5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{51139EBA-7198-7EDD-E7EC-73C0537FBA37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51139EBA-7198-7EDD-E7EC-73C0537FBA37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{51139EBA-7198-7EDD-E7EC-73C0537FBA37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51139EBA-7198-7EDD-E7EC-73C0537FBA37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

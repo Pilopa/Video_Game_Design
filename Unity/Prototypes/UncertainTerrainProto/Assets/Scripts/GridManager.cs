@@ -2,7 +2,6 @@
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
-using VoxelBusters.RuntimeSerialization;
 
 public class GridManager : NetworkBehaviour
 {
@@ -17,17 +16,16 @@ public class GridManager : NetworkBehaviour
 
 	public bool movingUnit = false;
 	public bool moveRadiusShowing = false;
-	public bool unitIsMoving = false;
-
+	public bool attackRadiusShowing = false;
 
 	Ray ray;
 	RaycastHit hit;
 
 	//Lists
-	List<GameObject> tiles = new List<GameObject> ();
-	List<GameObject> moveTiles = new List<GameObject> ();
-	List<GameObject> attackTiles = new List<GameObject> ();
-	List<GameObject> notAttackTiles = new List<GameObject> ();
+	public List<GameObject> tiles = new List<GameObject> ();
+	public List<GameObject> moveTiles = new List<GameObject> ();
+	public List<GameObject> attackTiles = new List<GameObject> ();
+	public List<GameObject> notAttackTiles = new List<GameObject> ();
 
 	//Camera
 	public GameObject cameraMover;
@@ -37,13 +35,13 @@ public class GridManager : NetworkBehaviour
 	// Menues, Popups and Tooltips
 	public Canvas PopupMenues;
 	public GameObject ActionMenue;
+	public GameObject AbilityMenue;
 	bool actionMenueActive = false;
 
 	bool moveRadiusIsActive = false;
 
 	//Server stuff
 	int playersDone = 0;
-	RSManager rsmanager = new RSManager ();
 
 	// Use this for initialization
 	void Start ()
@@ -156,7 +154,6 @@ public class GridManager : NetworkBehaviour
 			moveRadiusShowing = true;
 			if (mr > 0) {
 				mr -= 1;
-
 				foreach (GameObject tile in startTile.GetComponent<TileScript> ().neighbours) {
 					if (tile.GetComponent<TileScript> ().accessible && !tile.GetComponent<TileScript> ().hasUnit) {		
 						if (!moveTiles.Contains (tile)) {
@@ -173,6 +170,30 @@ public class GridManager : NetworkBehaviour
 		}
 	}
 
+	public void showAttackRadius(int min, int max, List<GameObject> startTile){
+		Debug.Log (startTile[0].GetComponent<TileScript>().posX + " TilePosX");
+		attackRadiusShowing = true;
+		List<GameObject> tmp = new List<GameObject> (startTile);
+		notAttackTiles.Clear ();
+		if (max > 0) {
+			max -= 1;
+			min -= 1;
+			foreach (GameObject tile in tmp) {
+				foreach (GameObject t in tile.GetComponent<TileScript> ().neighbours) {
+					if (t.GetComponent<TileScript> ().accessible) {
+						if (!attackTiles.Contains (t)) {
+							if (min <= 0) {
+								t.GetComponent<Renderer> ().material.color = Color.red;
+							}
+							notAttackTiles.Add (t);  // used for the next iteration
+							attackTiles.Add (t);
+						}
+					}
+				} 
+			}
+			showAttackRadius(min, max, notAttackTiles);
+		}
+	}
 
 	public void calculatePath (GameObject destination)
 	{
@@ -310,6 +331,12 @@ public class GridManager : NetworkBehaviour
 		hideMoveRadius ();
 	}
 
+
+	public void ShowAbilities(bool value){
+		Debug.Log ("Attack! " + value);
+		AbilityMenue.SetActive (value);
+	}
+
 	public void hideMoveRadius ()
 	{
 		moveRadiusShowing = false;
@@ -338,6 +365,22 @@ public class GridManager : NetworkBehaviour
 	public void setIsActive ()
 	{
 		moveRadiusIsActive = false;
+	}
+
+	public void Ability1(){
+		selectedUnit.GetComponent<PlayerUnit> ().Ability1Button ();
+	}
+
+	public void Ability2(){
+
+	}
+
+	public void Ability3(){
+
+	}
+
+	public void Ability4(){
+
 	}
 }
 
