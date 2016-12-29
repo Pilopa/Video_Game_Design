@@ -38,6 +38,7 @@ public class PlayerUnit : NetworkBehaviour {
 	}
 
 	void Ability1(){
+		
 		//Button click: Show spawn radius
 		//Tile click: Spawn Turret on location
 	}
@@ -61,6 +62,7 @@ public class PlayerUnit : NetworkBehaviour {
 		Physics.Raycast (transform.position, Vector3.down, out hit, 2.5f);
 		posX = hit.collider.gameObject.GetComponent<TileScript> ().posX;
 		posY = hit.collider.gameObject.GetComponent<TileScript> ().posY;
+		hit.collider.gameObject.GetComponent<TileScript> ().hasUnit = true;
 		currentHealth = maxHealth;
 		currentEnergy = maxEnergy;
 	}
