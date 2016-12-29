@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using VoxelBusters.RuntimeSerialization;
 
 public class GridManager : NetworkBehaviour {
 
@@ -40,6 +41,7 @@ public class GridManager : NetworkBehaviour {
 
 	//Server stuff
 	int playersDone = 0;
+	RSManager rsmanager = new RSManager();
 
 	// Use this for initialization
 	void Start () {
@@ -70,10 +72,11 @@ public class GridManager : NetworkBehaviour {
 					lastRow [y] = tmp;
 					tiles.Add (tmp);
 					NetworkServer.Spawn (tmp);
-
 				}
-
 			}
+		}
+		if (isClient) {
+
 		}
 	}
 	
@@ -113,7 +116,8 @@ public class GridManager : NetworkBehaviour {
 			//Debug.Log (Mathf.PerlinNoise ((float)g.GetComponent<TileScript> ().posX/(float)gridSizeX,(float) g.GetComponent<TileScript> ().posY/(float)gridSizeY));
 			float randomX = Random.Range (1f,35f);
 			float randomY = Random.Range (1f,35f);
-			g.transform.position = new Vector3 (g.transform.position.x, -1.5f +  (Mathf.PerlinNoise (randomY * (float)g.GetComponent<TileScript> ().posX / (float)gridSizeX, randomY * (float)g.GetComponent<TileScript> ().posY / (float)gridSizeY)), g.transform.position.z);
+			//Debug.Log (Mathf.PerlinNoise (randomX * (float)g.GetComponent<TileScript> ().posX / (float)gridSizeX, randomY * (float)g.GetComponent<TileScript> ().posY / (float)gridSizeY));
+			g.transform.position = new Vector3 (g.transform.position.x, -1.5f + (2f * (Mathf.PerlinNoise (randomX * (float)g.GetComponent<TileScript> ().posX / (float)gridSizeX, randomY * (float)g.GetComponent<TileScript> ().posY / (float)gridSizeY))), g.transform.position.z);
 	
 		}
 	}

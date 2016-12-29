@@ -1,0 +1,6 @@
+1.0
+	- Initial Release
+
+
+This is a demo version with limited support. Full version supports many types and can even serialize unity scene hierarchies.
+You can grab full version at http://u3d.as/g8b
