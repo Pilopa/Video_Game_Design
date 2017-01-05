@@ -59,10 +59,12 @@
      <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyServerList.cs" />
      <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyTopPanel.cs" />
      <Compile Include="Assets\Scripts\GridManager.cs" />
+     <Compile Include="Assets\Scripts\MenueScript.cs" />
      <Compile Include="Assets\Scripts\PlayerUnit.cs" />
      <Compile Include="Assets\Scripts\PopupMenueScript.cs" />
+     <Compile Include="Assets\Scripts\SpawnScript.cs" />
      <Compile Include="Assets\Scripts\TileScript.cs" />
-     <None Include="Assets\link.xml" />
+     <Compile Include="Assets\Scripts\TurretScript.cs" />
      <None Include="Assets\Lobby\Documentation.txt" />
      <None Include="Assets\Lobby\Instruction.txt" />
      <None Include="Assets\Fonts\OpenSans\License!.txt" />

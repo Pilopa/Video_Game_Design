@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GridManager : NetworkBehaviour
+public class GridManager : MonoBehaviour
 {
 
 	public GameObject tile;
@@ -46,7 +46,7 @@ public class GridManager : NetworkBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		if (isServer) {
+		//if (isServer) { //Networking - Disabled for now
 			Debug.Log ("ServerSide");
 			GameObject lastChild = null;
 			GameObject[] lastRow = new GameObject[gridSizeX];
@@ -73,10 +73,10 @@ public class GridManager : NetworkBehaviour
 					lastChild = tmp;
 					lastRow [y] = tmp;
 					tiles.Add (tmp);
-					NetworkServer.Spawn (tmp);
+				//NetworkServer.Spawn (tmp); //Networking - Disabled for now
 				}
 			}
-		}
+		//}
 	}
 	
 	// Update is called once per frame
@@ -104,12 +104,12 @@ public class GridManager : NetworkBehaviour
 			}
 
 		}
-		if (isServer) {
+		//if (isServer) {
 			if (playersDone == 2) {
 				shiftTile ();
 				playersDone = 0;
 			}
-		}
+		//}
 	}
 
 	public void shiftTile ()
@@ -123,14 +123,13 @@ public class GridManager : NetworkBehaviour
 			if (g.GetComponent<TileScript> ().hasUnit) {
 				RaycastHit output;
 				Physics.Raycast (g.transform.position, Vector3.up, out output, 3.0f);
-				output.collider.gameObject.transform.position = new Vector3 (output.collider.gameObject.transform.position.x, g.transform.position.y + 2.5f, output.collider.gameObject.transform.position.z);
+				output.collider.gameObject.transform.position = new Vector3 (output.collider.gameObject.transform.position.x, g.transform.position.y + 2f, output.collider.gameObject.transform.position.z);
 			}
 		}
 	}
 
 	public void unitClick (GameObject unit)
 	{
-		if (unit.GetComponent<NetworkIdentity> ().localPlayerAuthority) {
 			int moveRadius = unit.GetComponent<PlayerUnit> ().moveRadius;
 
 			if (!movingUnit && moveRadiusShowing) {
@@ -141,7 +140,7 @@ public class GridManager : NetworkBehaviour
 			} else if (!moveRadiusShowing) {
 				showMoveRadius (moveRadius, tiles [unit.GetComponent<PlayerUnit> ().posX * gridSizeX + unit.GetComponent<PlayerUnit> ().posY]);
 			}
-		}
+
 	}
 
 
@@ -291,13 +290,15 @@ public class GridManager : NetworkBehaviour
 
 	public IEnumerator MoveOverSeconds (GameObject objectToMove, float seconds, List<GameObject> path)
 	{
+		
 		if (path.Count == 0) {
 			Debug.Log ("Path Empty");
 			yield break;
 		}
+
 		float elapsedTime = 0;
 		Vector3 startingPos = objectToMove.transform.position;
-		Vector3 end = new Vector3 (path [path.Count - 1].transform.position.x, path [path.Count - 1].transform.position.y + 2.5f, path [path.Count - 1].transform.position.z); 			//path.Count - 1
+		Vector3 end = new Vector3 (path [path.Count - 1].transform.position.x, path [path.Count - 1].transform.position.y + 2f, path [path.Count - 1].transform.position.z);
 		path [path.Count - 1].GetComponent<TileScript> ().parent = null;
 		path.RemoveAt (path.Count - 1);
 		while (elapsedTime < seconds) {
@@ -372,15 +373,27 @@ public class GridManager : NetworkBehaviour
 	}
 
 	public void Ability2(){
-
+		selectedUnit.GetComponent<PlayerUnit> ().Ability2Button ();
 	}
 
 	public void Ability3(){
-
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		if (players [1].Equals (selectedUnit)) {
+			selectedUnit.GetComponent<PlayerUnit> ().Ability3 (players[0]);
+		}
+		if (players [0].Equals (selectedUnit)) {
+			selectedUnit.GetComponent<PlayerUnit> ().Ability3 (players[1]);
+		}
 	}
 
 	public void Ability4(){
-
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+		if (players [1].Equals (selectedUnit)) {
+			selectedUnit.GetComponent<PlayerUnit> ().Ability3 (players[0]);
+		}
+		if (players [0].Equals (selectedUnit)) {
+			selectedUnit.GetComponent<PlayerUnit> ().Ability3 (players[1]);
+		}
 	}
 }
 
