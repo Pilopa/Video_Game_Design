@@ -30,7 +30,6 @@ public class TurretScript : MonoBehaviour {
 	}
 
 	public void updateGridPosition(){
-		Ray ray;
 		RaycastHit hit;
 
 		Physics.Raycast (transform.position, Vector3.down, out hit, 1.5f);

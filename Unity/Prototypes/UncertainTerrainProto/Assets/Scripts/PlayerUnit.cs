@@ -78,8 +78,15 @@ public class PlayerUnit : MonoBehaviour {
 		if (hit.collider != null) {
 			if(hit.collider.gameObject.tag.Equals("Tile")){
 				if (gridManager.attackTiles.Contains (hit.collider.gameObject)) {
+					hit.collider.gameObject.GetComponent<TileScript> ().hasUnit = true;
 					GameObject tempTurret = GameObject.Instantiate (Resources.Load ("Turret") as GameObject);
-					tempTurret.transform.position = new Vector3 (hit.collider.gameObject.transform.position.x, hit.collider.gameObject.transform.position.y + 2.5f, hit.collider.gameObject.transform.position.z);
+					tempTurret.transform.position = new Vector3 (hit.collider.gameObject.transform.position.x, hit.collider.gameObject.transform.position.y + 2f, hit.collider.gameObject.transform.position.z);
+					if (gameObject.GetComponent<Renderer> ().material.color == Color.red) {
+						tempTurret.GetComponent<Renderer> ().material.color = Color.red;
+					}
+					if (gameObject.GetComponent<Renderer> ().material.color == Color.blue) {
+						tempTurret.GetComponent<Renderer> ().material.color = Color.blue;
+					}
 					turret = tempTurret;
 					//NetworkServer.Spawn (turret); //Networking - Disabled for now
 				}
@@ -154,9 +161,9 @@ public class PlayerUnit : MonoBehaviour {
 		//button click: deal damage, check if push is possible
 		RaycastHit hit;
 		Physics.Raycast (transform.position, Vector3.forward, out hit, 5.1f);
+		List<GameObject> path = new List<GameObject>();
 		if (hit.collider != null) {
 			if (hit.collider.gameObject.tag == "Player") {
-				List<GameObject> path;
 				path.Add(gridManager.tiles[otherPlayer.GetComponent<PlayerUnit>().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit>().posY]);
 				path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY - 5]);
 				gridManager.StartCoroutine (gridManager.MoveOverSeconds (otherPlayer, 3f, path));
@@ -165,7 +172,6 @@ public class PlayerUnit : MonoBehaviour {
 		Physics.Raycast (transform.position, Vector3.left, out hit, 5.1f);
 		if (hit.collider != null) {
 			if (hit.collider.gameObject.tag == "Player") {
-				List<GameObject> path;
 				path.Add(gridManager.tiles[otherPlayer.GetComponent<PlayerUnit>().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit>().posY]);
 				path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX - 5 * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY + 5]);
 				gridManager.StartCoroutine (gridManager.MoveOverSeconds (otherPlayer, 3f, path));
@@ -174,7 +180,6 @@ public class PlayerUnit : MonoBehaviour {
 		Physics.Raycast (transform.position, Vector3.right, out hit, 5.1f);
 		if (hit.collider != null) {
 			if (hit.collider.gameObject.tag == "Player") {
-				List<GameObject> path;
 				path.Add(gridManager.tiles[otherPlayer.GetComponent<PlayerUnit>().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit>().posY]);
 				path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX + 5 * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY + 5]);
 				gridManager.StartCoroutine (gridManager.MoveOverSeconds (otherPlayer, 3f, path));
@@ -183,7 +188,6 @@ public class PlayerUnit : MonoBehaviour {
 		Physics.Raycast (transform.position, Vector3.back, out hit, 5.1f);
 		if (hit.collider != null) {
 			if (hit.collider.gameObject.tag == "Player") {
-				List<GameObject> path;
 				path.Add(gridManager.tiles[otherPlayer.GetComponent<PlayerUnit>().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit>().posY]);
 				path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY + 5]);
 				gridManager.StartCoroutine (gridManager.MoveOverSeconds (otherPlayer, 3f, path));
@@ -194,7 +198,6 @@ public class PlayerUnit : MonoBehaviour {
 			Physics.Raycast (turret.transform.position, Vector3.forward, out hit, 5.1f);
 			if (hit.collider != null) {
 				if (hit.collider.gameObject.tag == "Player") {
-					List<GameObject> path;
 					path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY]);
 					path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY - 5]);
 					gridManager.StartCoroutine (gridManager.MoveOverSeconds (otherPlayer, 3f, path));
@@ -203,7 +206,6 @@ public class PlayerUnit : MonoBehaviour {
 			Physics.Raycast (turret.transform.position, Vector3.left, out hit, 5.1f);
 			if (hit.collider != null) {
 				if (hit.collider.gameObject.tag == "Player") {
-					List<GameObject> path;
 					path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY]);
 					path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX - 5 * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY + 5]);
 					gridManager.StartCoroutine (gridManager.MoveOverSeconds (otherPlayer, 3f, path));
@@ -212,7 +214,6 @@ public class PlayerUnit : MonoBehaviour {
 			Physics.Raycast (turret.transform.position, Vector3.right, out hit, 5.1f);
 			if (hit.collider != null) {
 				if (hit.collider.gameObject.tag == "Player") {
-					List<GameObject> path;
 					path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY]);
 					path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX + 5 * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY + 5]);
 					gridManager.StartCoroutine (gridManager.MoveOverSeconds (otherPlayer, 3f, path));
@@ -221,7 +222,6 @@ public class PlayerUnit : MonoBehaviour {
 			Physics.Raycast (turret.transform.position, Vector3.back, out hit, 5.1f);
 			if (hit.collider != null) {
 				if (hit.collider.gameObject.tag == "Player") {
-					List<GameObject> path;
 					path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY]);
 					path.Add (gridManager.tiles [otherPlayer.GetComponent<PlayerUnit> ().posX * gridManager.gridSizeX + otherPlayer.GetComponent<PlayerUnit> ().posY + 5]);
 					gridManager.StartCoroutine (gridManager.MoveOverSeconds (otherPlayer, 3f, path));
