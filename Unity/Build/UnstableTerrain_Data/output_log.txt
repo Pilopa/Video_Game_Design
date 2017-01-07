@@ -1,0 +1,80 @@
+Initialize engine version: 5.6.0b3 (358ff4ed3952)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 980M (ID=0x1617)
+    Vendor:   NVIDIA
+    VRAM:     8152 MB
+    Driver:   21.21.13.7619
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\UnityEngine.TestRunner.dll (this message is harmless)
+Loading C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\UnityEngine.TestRunner.dll into Unity Child Domain
+Platform assembly: C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\nunit.framework.dll (this message is harmless)
+Loading C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\nunit.framework.dll into Unity Child Domain
+- Completed reload, in  0.019 seconds
+Platform assembly: C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\David\Video_Game_Design\Unity\Build\UnstableTerrain_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 75Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 0.985841 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 3824 -> priority: 1 
+  Thread -> id: 1044 -> priority: 1 
+NullReferenceException: Object reference not set to an instance of an object
+  at PlayerUnit+<CharacterSetup>c__Iterator0.MoveNext () [0x00000] in <filename unknown>:0 
+  at UnityEngine.SetupCoroutine.InvokeMoveNext (IEnumerator enumerator, IntPtr returnValueAddress) [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.727930 ms
+
+Unloading 141 unused Assets to reduce memory usage. Loaded Objects now: 512.
+Total: 0.264113 ms (FindLiveObjects: 0.031549 ms CreateObjectMapping: 0.015924 ms MarkObjects: 0.175173 ms  DeleteObjects: 0.040563 ms)
+
+ServerSide
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Tile
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Tile
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+TileCheckx1/y0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+TileCheckx0/y1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+TileCheckx1/y2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+TileCheckx2/y1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
